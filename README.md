@@ -33,7 +33,7 @@
  微博的评论，点赞功能，每个微博的主页功能等等，能填的坑还有很多，不过大体框架写好了，开源出来也是希望大家能一起加功能。
  
 ## 结语
-这个项目用来练习Node做全栈比较好了，代码注释我写的很多很详细，如果本项目对您有一丝丝的小帮助，求个star，也欢迎fork，一起加上更多功能。
+这个项目用来练习Node比较好了，代码注释写的很多，如果本项目对您有一丝丝的小帮助，求个star，也欢迎fork，一起加上更多功能。
 
 ## DEMO
 ![image](https://github.com/ZhangMingZhao1/Node-microblogging-system/blob/master/demo.jpg)
