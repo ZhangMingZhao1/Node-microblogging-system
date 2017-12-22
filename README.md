@@ -1,11 +1,11 @@
 # 基于Node和MongoDB的Web微博系统
 
 ## 概述
- 项目是受到《Node.js开发指南》一书启发，作者BYVoid大佬是当时第一批Node开发者，当时学习者迫切需要一个这么DEMO。当然现在已经过去很多年了，Node早就更新无数次了，12年的这本书也就过时了，许多代码都根本跑不通了。
- 项目的后台用的express。
- 数据库部分自己写的原生MongoDB，没有去用控制力更强大的mongoose框架，多写原生东西对自己有好处。
- 前端用的是jQuery,underscore.js
- 样式用的Bootstrap框架。
+ 项目是受到《Node.js开发指南》一书启发，作者BYVoid大佬是当时第一批Node开发者，当时学习者迫切需要一个这么DEMO。当然现在已经过去很多年了，Node早就更新无数次了，12年的这本书也就过时，许多代码都根本跑不通了。
+ 1. 项目的后台用的express。
+ 2. 数据库部分自己写的原生MongoDB，没有去用控制力更强大的mongoose框架，多写原生东西对自己有好处。
+ 3. 前端用的是jQuery,underscore.js
+ 4. 样式用的Bootstrap框架。
  
 ## 设计
  形式上采用的是MVC结构，数据库和加密部分在model层，路由控制充当Controller，ejs前端展示就是view层了。
