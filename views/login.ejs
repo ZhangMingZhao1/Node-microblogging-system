@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>Jumbotron Template for Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Custom styles for this template -->
+    <link href="/css/jumbotron.css" rel="stylesheet">
+    <style type = "text/css">
+        body {
+            padding-top: 100px;
+        }
+        #warning {
+            display: none;
+        }
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<% include header.ejs %>
+
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <h1>登陆</h1>
+        <form>
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" class="form-control" id="username" style="width:800px;" placeholder="可以是中文，不能和别人重复">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" class="form-control" id="password" style="width:800px;" placeholder="至少六位">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputFile">File input</label>
+                <input type="file" id="exampleInputFile">
+                <p class="help-block">Example block-level help text here.</p>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> 我遵守注册规定
+                </label>
+            </div>
+            <button type="button" class="btn btn-default" id = "signin">登陆</button>
+        </form>
+
+        <div class="alert alert-danger" role="alert" id ="warning">
+
+        </div>
+    </div>
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2016 Company, Inc.</p>
+    </footer>
+</div> <!-- /container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    $("input").focus(function(){
+        $("#warning").fadeOut();
+    });
+    $("#signin").click(function(){
+        //注册按钮的事件，用ajax提交表单
+        $.post("/dologin",{
+            "username" : $("#username").val(),
+            "password" : $("#password").val()
+        },function(result){
+            console.log("AJAX成功");
+            if(result == "1"){
+                //注册成功
+                alert("登陆成功！将自动跳转到首页");
+                window.location = "/";
+            }else if(result == "-1"){
+                //用户名被占用
+                $("#warning").fadeIn();
+                $("#warning").html("用户名不存在");
+            }else if(result == "-2"){
+                $("#warning").fadeIn();
+                $("#warning").html("密码错误");
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

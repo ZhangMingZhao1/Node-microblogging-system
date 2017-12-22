@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>班级说说</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="/css/jumbotron.css" rel="stylesheet">
+    <style type="text/css">
+        .grid {
+            height: 200px;
+        }
+        body {
+            padding-top: 50px;
+        }
+        .avatar {
+            border-radius: 50%;
+        }
+
+        #quanbushuoshuo {
+            height: 500px;
+        }
+    </style>
+    <script src="/js/jquery-1.11.3.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/underscore-noflect.js"></script>
+</head>
+
+<body>
+<% include header.ejs %>
+
+<!-- Main jumbotron for a primary marketing message or call to action -->
+<div class="jumbotron">
+    <% if(!login){ %>
+    <!-- 没有登陆的时候，显示登陆提示-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>
+                    欢迎！
+                </h1>
+
+                <p>班级说说是我们交流的园地，欢迎注册！</p>
+
+                <p><a class="btn btn-primary btn-lg" href="/regist" role="button">注册</a></p>
+            </div>
+            <div class="col-lg-6">
+                <p>已有账号登陆</p>
+
+                <form>
+                    <div class="form-group">
+                        <label for="username">用户名</label>
+                        <input type="text" class="form-control" id="username" placeholder="用户名，可以是中文，不能和别人重复">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">密码</label>
+                        <input type="password" class="form-control" id="password" placeholder="密码，至少6位">
+                    </div>
+                    <button type="button" id="denglu" class="btn btn-success">登陆</button>
+                </form>
+                <div class="alert alert-danger" role="alert" id="cuowukuang" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+    <% }else{ %>
+    <!-- 登陆之后，显示发言框-->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-1 " >
+                <a href="/setavatar"><img width="200px" class="avatar" src="/avatar/<%= avatar %>" alt=""/></a>
+            </div>
+            <div class="col-lg-6 col-lg-offset-2">
+                <p><%= username %></p>
+                <textarea name="content" id="content" cols="80" rows="4"></textarea>
+                <button type="button" id="fabiao" class="btn btn-success">发表说说</button>
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<div class="container">
+    <!-- 分页条-->
+    <nav>
+        <ul class="pagination">
+
+        </ul>
+    </nav>
+    <script type="text/javascript">
+        //分页条的Ajax
+        $.get("/getshuoshuoamount", function (result) {
+            var amount = parseInt(result);
+            //总页数
+            pageamount = Math.ceil(amount / 20);
+            for (var i = 0; i < pageamount; i++) {
+                $(".pagination").append("<li><a href='javascript:void(0);'>" + i + "</a></li>");
+            }
+            $(".pagination li:first").addClass("active");
+            //监听
+            $(".pagination li").click(function () {
+                var page = $(this).index();
+                getPage(page);
+                $(this).addClass("active").siblings().removeClass("active");
+            });
+        })
+    </script>
+    <!-- 分页条-->
+    <!-- 20条记录 -->
+    <div class="row" id="quanbushuoshuo">
+
+    </div>
+    <!-- 20条记录 -->
+</div>
+<!-- /container -->
+<footer>
+    <p>&copy; Company 2014</p>
+</footer>
+
+<script type="text/template" id="moban">
+    <div class="col-md-4 grid">
+        <h2><img width="40" class="avatar" src="/avatar/{{=avatar}}" alt=""/>{{=username}}说：</h2>
+
+        <p>{{=content}}</p>
+
+        <p>{{=datetime}}</p>
+
+        <p><a class="btn btn-default" href="#" role="button">查看详细</a></p>
+    </div>
+</script>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+
+
+<script type="text/javascript">
+    var $quanbushuoshuo = $("#quanbushuoshuo");
+    //得到模板函数
+    var compiled = _.template($("#moban").html());
+
+    getPage(0);
+    //请求分页的说说信息
+    function getPage(page) {
+        //将现在的页面内容清除
+        $("#quanbushuoshuo").html("");
+        $.ajax({
+            "url": "/getallshuoshuo?page=" + page,
+            "type": "get",
+            "success": function (result) {
+                //result是一个数组
+                //console.log(Array.isArray(result));
+                iterator(0);
+                //迭代器
+                function iterator(i) {
+                    if (i == result.length) {
+                        //在这里书写请求完毕之后做的事情
+                        return;  //不用继续迭代了
+                    }
+                    $.get("/getuserinfo?username=" + result[i].username, function (result2) {
+                            //修改字典，给字典增加一项
+                            result[i].avatar = result2.avatar;
+                            //组装模板
+                            var htmlstring = compiled(result[i]);
+                            //添加DOM
+                            $("#quanbushuoshuo").append($(htmlstring));
+                            iterator(i + 1);
+                        }
+                    );
+                }
+            }
+        });
+    }
+
+    //文本框得到焦点，错误提示小时
+    $("input").focus(function () {
+        $("#cuowukuang").fadeOut();
+    });
+    //登陆按钮，登陆
+    $("#denglu").click(function () {
+        //注册按钮的事件，用ajax提交表单
+        $.post("/dologin", {
+            "username": $("#username").val(),
+            "password": $("#password").val()
+        }, function (result) {
+            if (result == "1") {
+                //注册成功
+                window.location = "/";
+            } else if (result == "-1") {
+                $("#cuowukuang").fadeIn();
+                $("#cuowukuang").html("用户名不存在");
+            } else if (result == "-2") {
+                $("#cuowukuang").fadeIn();
+                $("#cuowukuang").html("密码错误！");
+            }
+        });
+    });
+
+    //点击发布按钮之后做的事情
+    $("#fabiao").click(function () {
+        //注册按钮的事件，用ajax提交表单
+        $.post("/post", {
+            "content": $("#content").val()
+        }, function (result) {
+            if (result == "1") {
+                //注册成功
+                alert("发布成功");
+            } else {
+                alert("请联系管理员，发布失败");
+            }
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!--这个页面是共享的-->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">班级说说</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li <% if(active=="主页"){ %> class = "active" <% } %> ><a href="/">全部说说 <span class="sr-only">(current)</span></a></li>
+                <%if(login) { %>
+                    <li <% if(active=="我的说说"){ %> class = "active" <% } %> ><a href="/user/<%= username %>">我的说说</a></li>
+                <% } %>
+                <li <% if(active=="成员列表"){ %> class = "active" <% } %> ><a href="/userlist">成员列表</a></li>
+            </ul>
+            <%
+            if(!login) {
+            %>
+            <ul class="nav navbar-nav navbar-right">
+                <li <% if(active=="注册"){ %> class = "active" <% } %> ><a href="/regist">注册</a></li>
+                <li <% if(active=="登陆"){ %> class = "active" <% } %> ><a href="/login">登陆</a></li>
+            </ul>
+            <%
+            }else{
+
+            %>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="">欢迎您！<%=username%></a></li>
+                <li><a href="/exit">退出</a></li>
+            </ul>
+
+            <%
+            }
+            %>
+        </div><!--/.navbar-collapse -->
+    </div>
+</nav>
+
