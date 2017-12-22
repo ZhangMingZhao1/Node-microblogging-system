@@ -38,4 +38,7 @@
 ## DEMO
 ![image](https://github.com/ZhangMingZhao1/Node-microblogging-system/blob/master/demo.jpg)
 
+
+# 有的问题可以Issue，或者加扣扣1104272319联系我。
+
  
